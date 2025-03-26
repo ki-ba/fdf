@@ -1,0 +1,9 @@
+.obj
+minilibx-linux
+*.fdf
+*.json
+*.sh
+test_maps
+fdf
+fdf_linux
+.cache
