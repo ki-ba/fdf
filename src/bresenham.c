@@ -6,12 +6,12 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 09:45:44 by kbarru            #+#    #+#             */
-/*   Updated: 2025/03/20 11:45:25 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/03/27 12:45:32 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
-void	init_dir(t_dir *dir, t_point a, t_point b)
+void	init_dir(t_dir *dir, t_ppoint a, t_ppoint b)
 {
 	int	dx;
 	int	dy;
@@ -32,12 +32,12 @@ void	init_dir(t_dir *dir, t_point a, t_point b)
 		dir->x = 1;
 }
 
-void	bresenham_gentle(t_point a, t_point b, t_data img)
+void	bresenham_gentle(t_ppoint a, t_ppoint b, t_data img)
 {
 	t_point	cur_point;
-	int	d;
-	int	dy;
-	int	dx;
+	int		d;
+	int		dy;
+	int		dx;
 	t_dir	dir;
 
 	init_dir(&dir, a, b);
@@ -47,26 +47,26 @@ void	bresenham_gentle(t_point a, t_point b, t_data img)
 	dy = abs(b.y - a.y);
 	dx = abs(b.x - a.x);
 	d = 2 * dy - dx;
-	while(cur_point.x != b.x || cur_point.y != b.y)
+	while (cur_point.x != b.x || cur_point.y != b.y)
 	{
 		if (d < 0)
-			d+= (2*dy);
+			d += (2 * dy);
 		else
 		{
-			d += (2*dy - 2*dx);
+			d += (2 * dy - 2 * dx);
 			cur_point.y += dir.y;
 		}
-		my_mlx_pixel_put(&img, cur_point.x, cur_point.y, 0x00ffff00);
+		my_mlx_pixel_put(&img, cur_point.x, cur_point.y, z_to_color(cur_point.z));
 		cur_point.x += dir.x;
 	}
 }
 
-void	bresenham_steep(t_point a, t_point b, t_data img)
+void	bresenham_steep(t_ppoint a, t_ppoint b, t_data img)
 {
 	t_point	cur_point;
-	int	d;
-	int	dy;
-	int	dx;
+	int		d;
+	int		dy;
+	int		dx;
 	t_dir	dir;
 
 	init_dir(&dir, a, b);
@@ -75,24 +75,24 @@ void	bresenham_steep(t_point a, t_point b, t_data img)
 	dy = abs(b.y - a.y);
 	dx = abs(b.x - a.x);
 	d = 2 * dx - dy;
-	while(cur_point.x != b.x || cur_point.y != b.y)
+	while (cur_point.x != b.x || cur_point.y != b.y)
 	{
 		if (d < 0)
-			d+= (2*dx);
+			d += (2 * dx);
 		else
 		{
-			d += (2*dx - 2*dy);
+			d += (2 * dx - 2 * dy);
 			cur_point.x += dir.x;
 		}
-		my_mlx_pixel_put(&img, cur_point.x, cur_point.y, 0x00ffff00);
+		my_mlx_pixel_put(&img, cur_point.x, cur_point.y, z_to_color(cur_point.z));
 		cur_point.y += dir.y;
 	}
 }
 
-void	bresenham(t_point a, t_point b, t_data img)
+void	bresenham(t_ppoint a, t_ppoint b, t_data img)
 {
-	float m;
-	
+	float	m;
+
 	if (b.x - a.x == 0)
 	{
 		bresenham_gentle(a, b, img);

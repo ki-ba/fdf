@@ -1,33 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   debug.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/25 10:40:26 by kbarru            #+#    #+#             */
-/*   Updated: 2025/03/25 11:36:07 by kbarru           ###   ########lyon.fr   */
+/*   Created: 2025/03/27 10:20:55 by kbarru            #+#    #+#             */
+/*   Updated: 2025/03/27 13:13:13 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include "libft.h"
 
-int	usage(void)
+void	print_full_map(t_map *map)
 {
-	ft_putstr_fd("Usage : ./fdf <map_name.fdf>\n", 1);
-	return (1);
-}
+	size_t	i;
 
-void	invalid_map(t_map *map)
-{
-	ft_putstr_fd("Invalid map\n", 2);
-	free_exit(map, EXIT_FAILURE);
-}
-
-void	free_exit(t_map *map, int exit_status)
-{
-	if (map)
-		free(map->map);
-	exit(exit_status);
+	i = 0;
+	ft_printf("\n\n===== FULL MAP =====\n\n");
+	while (i < map->capacity)
+	{
+		ft_printf("%d", map->map[i].z);
+		if (++i % (map->len) == 0)
+			ft_printf("\n");
+		else
+			ft_printf("	");
+	}
+	ft_printf("\nmap capacity :	%d	t_points\noccupied :	%d	t_points\n", map->capacity, map->len * map->height);
+	ft_printf("\n\n====================\n\n");
 }
