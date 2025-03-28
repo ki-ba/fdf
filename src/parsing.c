@@ -22,12 +22,13 @@ t_point	create_point(int x, int y, int z)
 	return (point);
 }
 
-t_ppoint	project_point(t_point point)
+t_point	project_point(t_point point)
 {
-	t_ppoint	p_point;
+	t_point	p_point;
 
 	p_point.x = point.x * cos(ANGLE) + point.y * cos(ANGLE + 2) + point.z * cos(ANGLE - 2) + WIDTH / 2;
 	p_point.y = point.x * sin(ANGLE) + point.y * sin(ANGLE + 2) + point.z * sin(ANGLE - 2) + HEIGHT / 2;
+	p_point.z = point.z;
 	return (p_point);
 }
 
@@ -62,7 +63,7 @@ void	read_map(t_map *map, int map_fd)
 		{
 			if ((row * map->len + col) >= (int)map->capacity)
 				double_array_size(map);
-			map->map[(row * map->len + col)] = create_point(TILE_WIDTH * col, TILE_HEIGHT * row,  get_value(line, col));
+			map->map[(row * map->len + col)] = create_point(col, row, get_value(line, col));
 		}
 		free(line);
 		++row;

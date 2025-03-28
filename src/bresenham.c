@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "fdf.h"
-void	init_dir(t_dir *dir, t_ppoint a, t_ppoint b)
+void	init_dir(t_dir *dir, t_point a, t_point b)
 {
 	int	dx;
 	int	dy;
@@ -32,7 +32,7 @@ void	init_dir(t_dir *dir, t_ppoint a, t_ppoint b)
 		dir->x = 1;
 }
 
-void	bresenham_gentle(t_ppoint a, t_ppoint b, t_data img)
+void	bresenham_gentle(t_point a, t_point b, t_data img)
 {
 	t_point	cur_point;
 	int		d;
@@ -61,7 +61,7 @@ void	bresenham_gentle(t_ppoint a, t_ppoint b, t_data img)
 	}
 }
 
-void	bresenham_steep(t_ppoint a, t_ppoint b, t_data img)
+void	bresenham_steep(t_point a, t_point b, t_data img)
 {
 	t_point	cur_point;
 	int		d;
@@ -89,7 +89,7 @@ void	bresenham_steep(t_ppoint a, t_ppoint b, t_data img)
 	}
 }
 
-void	bresenham(t_ppoint a, t_ppoint b, t_data img)
+void	bresenham(t_point a, t_point b, t_data img)
 {
 	float	m;
 

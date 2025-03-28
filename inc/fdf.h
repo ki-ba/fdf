@@ -18,17 +18,26 @@
 # include <mlx.h>
 
 # ifndef WIDTH
-#  define WIDTH 2920
+#  define WIDTH 1920 
 # endif
 
 # ifndef HEIGHT
-#  define HEIGHT 2080
+#  define HEIGHT 1080 
 # endif
 
-# define TILE_HEIGHT 32
-# define TILE_WIDTH 32
+# define TILE_HEIGHT 16
+# define TILE_WIDTH 16
 
-# define ANGLE 0.785 
+# define PI 3.1415
+# define ANGLE 7
+
+# ifndef INT_MIN
+#  define INT_MIN -2147483648
+# endif
+
+# ifndef INT_MAX
+#  define INT_MAX 2147483647
+# endif
 
 typedef struct s_data
 {
@@ -46,12 +55,6 @@ typedef struct s_point
 	int	z;
 }		t_point;
 
-typedef struct s_ppoint
-{
-	int	x;
-	int	y;
-}		t_ppoint;
-
 typedef struct s_dir
 {
 	int	x;
@@ -65,16 +68,15 @@ typedef struct s_map
 	t_point	*map;
 	size_t	capacity;
 }			t_map;
-/* main.c */
 
+/* main.c */
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
 
 /* parsing.c */
-
 t_point	create_point(int x, int y, int z);
 void	count_map_height(t_map map, char map_filename[]);
 void	read_map(t_map *map, int map_fd);
-t_ppoint	project_point(t_point point);
+t_point	project_point(t_point point);
 void	print_arr(char **map);
 void	print_arr_int(int **arr);
 int		**convert_map(char **map);
@@ -85,10 +87,7 @@ int		count_words(char *s, char sep);
 void	set_map_dimensions(t_map *map, char map_filename[]);
 
 /* bresenham.c */
-
-void	bresenham(t_ppoint a, t_ppoint b, t_data img);
-void	bresenham_steep(t_ppoint a, t_ppoint b, t_data img);
-void	bresenham_gentle(t_ppoint a, t_ppoint b, t_data img);
+void	bresenham(t_point a, t_point b, t_data img);
 
 /* error.c */
 void	invalid_map(t_map *map);
@@ -103,4 +102,9 @@ t_point	*double_array_size(t_map *map);
 /* graphics.c */
 int		z_to_color(int value);
 void	print_square(t_data img, t_point origin, int size, int fill);
+
+/* scale.c */
+int		determine_scale(t_map *map);
+void	scale_map(t_map *map);
+
 #endif

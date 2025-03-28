@@ -12,7 +12,7 @@ MLX = mlx
 LIBS := -L$(MLX_DIR) -lmlx -lXext -lX11 -lm -lz -L$(LIBFT_DIR) -lft
 INCS = -I$(HEADER_DIR) -I$(LIBFT_DIR) -I$(MLX_DIR)
 HEADER = $(HEADER_DIR)fdf.h
-SRC = main.c parsing.c bresenham.c error.c dynamic_array_utils.c graphics.c debug.c
+SRC = main.c parsing.c bresenham.c error.c dynamic_array_utils.c graphics.c debug.c scale.c
 PSRC = $(addprefix $(SRC_DIR), $(SRC))
 OBJ = $(subst $(SRC_DIR), $(OBJ_DIR), $(PSRC:%.c=%.o))
 

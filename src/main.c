@@ -11,15 +11,7 @@
 /* ************************************************************************** */
 
 #include "fdf.h"
-
-t_ppoint	ij_to_xy(t_ppoint a)
-{
-	t_ppoint	b;
-
-	b.x = (a.x - a.y) * 0.5 * (TILE_WIDTH - 1) + WIDTH / 2;
-	b.y = (a.x + a.y) * 0.25 * (TILE_HEIGHT - 1) + HEIGHT / 2;
-	return (b);
-}
+#include "libft.h"
 
 void	init_map(t_map *map, char filename[])
 {
@@ -40,38 +32,44 @@ int	get_z(t_map *map, int x, int y)
 	return (map->map[(y * map->len + x)].z);
 }
 
+void	draw_map(t_map *map, t_data img)
+{
+	t_point		cur_point;
+	t_point		projected;
+	int			i;
+
+	i = 0;
+	while (i < map->len * map->height)
+	{
+		cur_point = (map->map[i]);
+		projected = project_point(cur_point);
+		if (i >= map->len)
+			bresenham(projected, project_point(map->map[i - map->len]), img);
+		if (i % map->len < map->len - 1)
+			bresenham(projected, project_point(map->map[i + 1]), img);
+		/*ft_printf("printing (%d, %d) -> (%d, %d)	(value : %d)\n",cur_point.x, cur_point.y, projected.x, projected.y, projected.z);*/
+		++i;
+	}
+}
+
 int	main(int argc, char *argv[])
 {
 	t_map		map;
 	void		*mlx;
 	void		*mlx_win;
 	t_data		img;
-	t_point		cur_point;
-	t_ppoint	cur_ppoint;
-	int			i;
 
 	if (argc != 2)
 		return (usage());
-	i = 0;
 	mlx = mlx_init();
-	mlx_win = mlx_new_window(mlx, WIDTH, HEIGHT, "Hello world!");
+	mlx_win = mlx_new_window(mlx, WIDTH, HEIGHT, "FdF");
 	img.img = mlx_new_image(mlx, WIDTH, HEIGHT);
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length,
 			&img.endian);
 	init_map(&map, argv[1]);
-	while (i < map.len * map.height)
-	{
-		cur_point = map.map[i];
-		cur_ppoint = project_point(cur_point);
-		if (i >= map.len)
-			bresenham(cur_ppoint, project_point(map.map[i - map.len]), img);
-		if (i % map.len < map.len - 1)
-			bresenham(cur_ppoint, project_point(map.map[i + 1]), img);
-		ft_printf("printing (%d, %d) -> (%d, %d)\n",cur_point.x, cur_point.y, cur_ppoint.x, cur_ppoint.y);
-		//my_mlx_pixel_put(&img, cur_ppoint.x, cur_ppoint.y, 0x00FFFF00);
-		++i;
-	}
-	print_full_map(&map);
+	/*print_full_map(&map);*/
+	scale_map(&map);
+	draw_map(&map, img);
 	mlx_put_image_to_window(mlx, mlx_win, img.img, 0, 0);
 	mlx_loop(mlx);
 	free_exit(&map, EXIT_SUCCESS);

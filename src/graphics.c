@@ -15,7 +15,7 @@
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 {
 	char	*dst;
-
+	
 	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
 	*(unsigned int *)dst = color;
 }
@@ -63,7 +63,7 @@ int	z_to_color(int value)
 {
 	int	color;
 
-	color = (0x00ffffff & value);
-	ft_printf("%x\n", color);
+	color = (0x00ffffff & (value + 0x00505050));
+	/*ft_printf("%x\n", color);*/
 	return (color);
 }
