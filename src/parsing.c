@@ -11,26 +11,28 @@
 /* ************************************************************************** */
 
 #include "fdf.h"
+#include "libft.h"
 
-t_point	create_point(int x, int y, int z)
+void	create_point(t_matrix *point, double x, double y, double z)
 {
-	t_point	point;
+	double		values[3];
 
-	point.x = x;
-	point.y = y;
-	point.z = z;
-	return (point);
+	values[0] = x;
+	values[1] = y;
+	values[2] = z;
+	create_matrix(point, 1, 3, values);
+	/*printf("created point %f, %f, %f\n", point->m[0][0], point->m[0][1], point->m[0][2]);*/
 }
 
-t_point	project_point(t_point point)
-{
-	t_point	p_point;
-
-	p_point.x = point.x * cos(ANGLE) + point.y * cos(ANGLE + 2) + point.z * cos(ANGLE - 2) + WIDTH / 2;
-	p_point.y = point.x * sin(ANGLE) + point.y * sin(ANGLE + 2) + point.z * sin(ANGLE - 2) + HEIGHT / 2;
-	p_point.z = point.z;
-	return (p_point);
-}
+/*t_matrix	project_point(t_matrix point)*/
+/*{*/
+/*	t_matrix	p_point;*/
+/**/
+/*	p_point.m[X] = point.m[X] * cos(ANGLE) + point.m[Y] * cos(ANGLE + 2) + point.m[Z] * cos(ANGLE - 2);*/
+/*	p_point.m[Y] = point.m[X] * sin(ANGLE) + point.m[Y] * sin(ANGLE + 2) + point.m[Z] * sin(ANGLE - 2);*/
+/*	p_point.m[Z] = point.m[Z];*/
+/*	return (p_point);*/
+/*}*/
 
 int	open_map(char map_filename[])
 {
@@ -45,8 +47,8 @@ int	open_map(char map_filename[])
 void	read_map(t_map *map, int map_fd)
 {
 	char	*line;
-	int		col;
-	int		row;
+	size_t	col;
+	size_t	row;
 
 	row = 0;
 	line = get_next_line(map_fd);
@@ -55,15 +57,16 @@ void	read_map(t_map *map, int map_fd)
 	map->len = count_words(line, ' ');
 	while (line)
 	{
-		if ((int)count_words(line, ' ') != map->len)
+		if (count_words(line, ' ') != map->len)
 			invalid_map(map);
 		map->height = row + 1;
 		col = -1;
 		while (++col < map->len)
 		{
-			if ((row * map->len + col) >= (int)map->capacity)
+			if ((row * map->len + col) >= map->capacity)
 				double_array_size(map);
-			map->map[(row * map->len + col)] = create_point(col, row, get_value(line, col));
+			create_point(&map->map[(row * map->len + col)], col, row, get_value(line, col));
+			ft_printf("%d, %d, %d\n", col, row, get_value(line, col));
 		}
 		free(line);
 		++row;
@@ -71,11 +74,11 @@ void	read_map(t_map *map, int map_fd)
 	}
 }
 
-int	count_words(char *s, char sep)
+size_t	count_words(char *s, char sep)
 {
-	int	size;
-	int	i;
-	int	is_first_char;
+	size_t	size;
+	size_t	i;
+	size_t	is_first_char;
 
 	is_first_char = 1;
 	i = 0;
