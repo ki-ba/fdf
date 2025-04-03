@@ -6,18 +6,27 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 10:18:31 by kbarru            #+#    #+#             */
-/*   Updated: 2025/03/27 13:58:05 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/04/03 16:27:16 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
+#include "libft.h"
 
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 {
 	char	*dst;
-	
-	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
-	*(unsigned int *)dst = color;
+
+	if (x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT)
+	{
+		/*ft_printf("warning : %d, %d is outside of window\n", x, y);*/
+		;
+	}
+	else
+	{
+		dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
+		*(unsigned int *)dst = color;
+	}
 }
 
 void	print_square(t_data img, t_point origin, int size, int fill)

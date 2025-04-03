@@ -6,7 +6,7 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 10:40:26 by kbarru            #+#    #+#             */
-/*   Updated: 2025/03/25 11:36:07 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/04/03 14:33:28 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,4 +30,17 @@ void	free_exit(t_map *map, int exit_status)
 	if (map)
 		free(map->map);
 	exit(exit_status);
+}
+
+void	free_arr(t_point **arr, size_t n)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < n)
+	{
+		free(arr[i]);
+		++i;
+	}
+	free(arr);
 }
