@@ -6,11 +6,12 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 09:45:44 by kbarru            #+#    #+#             */
-/*   Updated: 2025/03/27 12:45:32 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/04/03 16:26:49 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
+
 void	init_dir(t_dir *dir, t_point a, t_point b)
 {
 	int	dx;
@@ -34,65 +35,63 @@ void	init_dir(t_dir *dir, t_point a, t_point b)
 
 void	bresenham_gentle(t_point a, t_point b, t_data img)
 {
-	t_point	cur_point;
 	int		d;
 	int		dy;
 	int		dx;
 	t_dir	dir;
 
 	init_dir(&dir, a, b);
-	cur_point.x = a.x;
-	cur_point.x = a.x;
-	cur_point.y = a.y;
-	dy = abs(b.y - a.y);
-	dx = abs(b.x - a.x);
+	dy = fabs(b.y - a.y);
+	dx = fabs(b.x - a.x);
 	d = 2 * dy - dx;
-	while (cur_point.x != b.x || cur_point.y != b.y)
+	while (a.x != b.x || a.y != b.y)
 	{
 		if (d < 0)
 			d += (2 * dy);
 		else
 		{
 			d += (2 * dy - 2 * dx);
-			cur_point.y += dir.y;
+			a.y += dir.y;
 		}
-		my_mlx_pixel_put(&img, cur_point.x, cur_point.y, z_to_color(cur_point.z));
-		cur_point.x += dir.x;
+		my_mlx_pixel_put(&img, a.x, a.y, z_to_color(a.z));
+		a.x += dir.x;
 	}
 }
 
 void	bresenham_steep(t_point a, t_point b, t_data img)
 {
-	t_point	cur_point;
 	int		d;
 	int		dy;
 	int		dx;
 	t_dir	dir;
 
 	init_dir(&dir, a, b);
-	cur_point.x = a.x;
-	cur_point.y = a.y;
-	dy = abs(b.y - a.y);
-	dx = abs(b.x - a.x);
+	dy = fabs(b.y - a.y);
+	dx = fabs(b.x - a.x);
 	d = 2 * dx - dy;
-	while (cur_point.x != b.x || cur_point.y != b.y)
+	while (a.x != b.x || a.y != b.y)
 	{
 		if (d < 0)
 			d += (2 * dx);
 		else
 		{
 			d += (2 * dx - 2 * dy);
-			cur_point.x += dir.x;
+			a.x += dir.x;
 		}
-		my_mlx_pixel_put(&img, cur_point.x, cur_point.y, z_to_color(cur_point.z));
-		cur_point.y += dir.y;
+		my_mlx_pixel_put(&img, a.x, a.y, z_to_color(a.z));
+		a.y += dir.y;
 	}
 }
 
 void	bresenham(t_point a, t_point b, t_data img)
 {
-	float	m;
+	double	m;
 
+	a.x = (int)round(a.x);
+	a.y = (int)round(a.y);
+	b.x = (int)round(b.x);
+	b.y = (int)round(b.y);
+	/*ft_printf("bresenham : (%d, %d) to (%d, %d)\n", (int)a.x, (int)a.y, (int)b.x, (int)b.y);*/
 	if (b.x - a.x == 0)
 	{
 		bresenham_gentle(a, b, img);

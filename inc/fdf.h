@@ -6,7 +6,7 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 16:28:02 by kbarru            #+#    #+#             */
-/*   Updated: 2025/03/27 14:32:45 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/04/03 16:37:21 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,9 @@ typedef struct s_data
 
 typedef struct s_point
 {
-	int	x;
-	int	y;
-	int	z;
+	double	x;
+	double	y;
+	double	z;
 }		t_point;
 
 typedef struct s_dir
@@ -63,17 +63,18 @@ typedef struct s_dir
 
 typedef struct s_map
 {
-	int		len;
-	int		height;
-	t_point	*map;
-	size_t	capacity;
+	size_t	len;
+	size_t	height;
+	size_t	h_capacity;
+	t_point	**map;
 }			t_map;
 
 /* main.c */
+void	init_map(t_map *map, int map_fd, size_t len);
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
 
 /* parsing.c */
-t_point	create_point(int x, int y, int z);
+t_point	create_point(double x, double y, double z);
 void	count_map_height(t_map map, char map_filename[]);
 void	read_map(t_map *map, int map_fd);
 t_point	project_point(t_point point);
@@ -83,7 +84,7 @@ int		**convert_map(char **map);
 int		get_value(char *map, int y);
 int		open_map(char map_filename[]);
 int		ft_strlen_ws(char *str);
-int		count_words(char *s, char sep);
+size_t	count_words(char *s, char sep);
 void	set_map_dimensions(t_map *map, char map_filename[]);
 
 /* bresenham.c */
@@ -93,18 +94,26 @@ void	bresenham(t_point a, t_point b, t_data img);
 void	invalid_map(t_map *map);
 int		usage(void);
 void	free_exit(t_map *map, int exit_status);
+void	free_arr(t_point **arr, size_t n);
 /* main.c */
 void	print_full_map(t_map *map);
 
 /* dynamic_array_utils.c */
-t_point	*double_array_size(t_map *map);
+void	double_array_size(t_map *map);
 
 /* graphics.c */
 int		z_to_color(int value);
 void	print_square(t_data img, t_point origin, int size, int fill);
 
 /* scale.c */
-int		determine_scale(t_map *map);
+size_t	determine_scale(t_map *map);
 void	scale_map(t_map *map);
+t_point	center_point(t_point p0);
+void	center_map(t_map *map);
+/* rotation.c */
 
+void	rotate_map(t_map *map, double a, t_point (*r_f)(t_point pt, double a));
+t_point	rotate_x(t_point p0, double a);
+t_point	rotate_y(t_point p0, double a);
+t_point	rotate_z(t_point p0, double a);
 #endif
