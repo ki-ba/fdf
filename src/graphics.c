@@ -73,6 +73,7 @@ int	z_to_color(int value)
 	int	color;
 
 	color = (0x00ffffff & (value + 0x00505050));
+	/*color = 0x00505050;*/
 	/*ft_printf("%x\n", color);*/
 	return (color);
 }

@@ -35,8 +35,11 @@ t_point	rotate_x(t_point p0, double a)
 	t_point	p1;
 
 	p1.x = p0.x;
-	p1.y = p0.y * cos(a) - p0.z * sin(a);
-	p1.z = p0.y * sin(a) + p0.z * cos(a);
+	p1.y = p0.y;
+	p1.z = p0.z;
+	p1.px = p0.px;
+	p1.py = p0.py * cos(a) - p0.pz * sin(a);
+	p1.pz = p0.py * sin(a) + p0.pz * cos(a);
 	return (p1);
 }
 
@@ -44,9 +47,12 @@ t_point	rotate_y(t_point p0, double a)
 {
 	t_point	p1;
 
-	p1.x = p0.x * cos(a) - p0.z * sin(a);
+	p1.x = p0.x;
 	p1.y = p0.y;
-	p1.z = p0.x * sin(a) + p0.z * cos(a);
+	p1.z = p0.z;
+	p1.px = p0.px * cos(a) - p0.pz * sin(a);
+	p1.py = p0.py;
+	p1.pz = p0.px * sin(a) + p0.pz * cos(a);
 	return (p1);
 }
 
@@ -54,8 +60,11 @@ t_point	rotate_z(t_point p0, double a)
 {
 	t_point	p1;
 
-	p1.x = p0.x * cos(a) - p0.y * sin(a);
-	p1.y = p0.x * sin(a) + p0.y * cos(a);
+	p1.x = p0.x;
+	p1.y = p0.y;
 	p1.z = p0.z;
+	p1.px = p0.px * cos(a) - p0.py * sin(a);
+	p1.py = p0.px * sin(a) + p0.py * cos(a);
+	p1.pz = p0.pz;
 	return (p1);
 }

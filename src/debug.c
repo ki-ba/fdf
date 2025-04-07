@@ -11,8 +11,6 @@
 /* ************************************************************************** */
 
 #include "fdf.h"
-#include "libft.h"
-#include <stddef.h>
 
 void	print_full_map(t_map *map)
 {
@@ -28,7 +26,7 @@ void	print_full_map(t_map *map)
 		while (j < map->len)
 		{
 			if (i < map->height)
-				ft_printf("[%d, %d, %d]", (int)round(map->map[i][j].x), (int)round(map->map[i][j].y), (int)round(map->map[i][j].z));
+				ft_printf("[%d, %d, %d]", (int)round(map->map[i][j].px), (int)round(map->map[i][j].py), (int)round(map->map[i][j].pz));
 			else
 				ft_printf("[x, x, x]");
 			if (j < map->len - 1)
@@ -41,4 +39,11 @@ void	print_full_map(t_map *map)
 	ft_printf("\nmap capacity :	%d	rows\noccupied :	%d	rows\n", map->h_capacity, map->height);
 	ft_printf("\nmap is :		%d * %d\n", map->height, map->len);
 	ft_printf("\n\n====================\n\n");
+}
+
+void	print_actions(t_scene scene)
+{
+	printf("rot : {%.2f, %.2f, %.2f}\n", scene.rot[0], scene.rot[1], scene.rot[2]);
+	printf("tr  : {%.2f, %.2f, %.2f}\n", scene.tr[0], scene.tr[1], scene.tr[2]);
+	printf("scale: %zu\n", scene.scale);
 }

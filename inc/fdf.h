@@ -18,18 +18,18 @@
 # include <mlx.h>
 
 # ifndef WIDTH
-#  define WIDTH 1920 
+#  define WIDTH 1920
 # endif
 
 # ifndef HEIGHT
-#  define HEIGHT 1080 
+#  define HEIGHT 1080
 # endif
 
 # define TILE_HEIGHT 16
 # define TILE_WIDTH 16
 
 # define PI 3.1415
-# define ANGLE 7
+# define ANGLE 0.39
 
 # ifndef INT_MIN
 #  define INT_MIN -2147483648
@@ -46,14 +46,16 @@ typedef struct s_data
 	int		bits_per_pixel;
 	int		line_length;
 	int		endian;
-}		t_data;
-
+}			t_data;
 typedef struct s_point
 {
 	double	x;
 	double	y;
 	double	z;
-}		t_point;
+	double	px;
+	double	py;
+	double	pz;
+}			t_point;
 
 typedef struct s_dir
 {
@@ -69,9 +71,27 @@ typedef struct s_map
 	t_point	**map;
 }			t_map;
 
+typedef struct s_scene
+{
+	t_map	*map;
+	size_t	scale;
+	double	rot[3];
+	double	tr[3];
+}			t_scene;
+
+typedef struct s_vars
+{
+	void	*mlx;
+	void	*win;
+	t_data	*img;
+	t_scene	*scene;
+}			t_vars;
+
 /* main.c */
 void	init_map(t_map *map, int map_fd, size_t len);
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
+void	print_actions(t_scene scene);
+void	print_full_map(t_map *map);
 
 /* parsing.c */
 t_point	create_point(double x, double y, double z);
@@ -107,9 +127,10 @@ void	print_square(t_data img, t_point origin, int size, int fill);
 
 /* scale.c */
 size_t	determine_scale(t_map *map);
-void	scale_map(t_map *map);
+void	translate_map(t_scene scene, int offset_x, int offset_y);
+void	scale_map(t_scene *scene);
 t_point	center_point(t_point p0);
-void	center_map(t_map *map);
+void	center_map(t_scene *scene);
 /* rotation.c */
 
 void	rotate_map(t_map *map, double a, t_point (*r_f)(t_point pt, double a));

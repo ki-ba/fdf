@@ -21,6 +21,9 @@ t_point	create_point(double x, double y, double z)
 	point.x = x;
 	point.y = y;
 	point.z = z;
+	point.px = x;
+	point.py = y;
+	point.pz = z;
 	return (point);
 }
 

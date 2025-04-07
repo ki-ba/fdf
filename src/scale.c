@@ -11,9 +11,6 @@
 /* ************************************************************************** */
 
 #include "fdf.h"
-#include "libft.h"
-#include <stddef.h>
-#include <stdint.h>
 
 void	get_horizontal_bounds(t_map map, int lr[2])
 {
@@ -76,57 +73,21 @@ size_t	determine_scale(t_map *map)
 	ft_printf("map is %d x %d\n", map->len, map->height);
 	get_vertical_bounds(*map, lr);
 	get_horizontal_bounds(*map, tb);
-	ft_printf("right : %dpx\nbot: %dpx\n", lr[1], tb[1]);
+	ft_printf("left : %d\nright : %dpx\ntop : %d\nbot: %dpx\n", lr[0], lr[1], tb[0], tb[1]);
 	scale = 1;
-	while (scale * lr[1] < 0.7 * WIDTH && scale * tb[1] < 0.7 * HEIGHT)
+	while (scale *(lr[1] - lr[0]) < 0.7 * WIDTH && scale * (tb[1] - tb[0]) < 0.7 * HEIGHT)
 	{
 		ft_printf("\n\n === SCALE = %d === \n\n", scale);
+		ft_printf("horizontal delta : %d\nvertical delta :%d\n\n\n", scale * (lr[1] - lr[0]), scale * (tb[1] - tb[0]));
 		ft_printf("right : %dpx\nbot: %dpx\n", scale * lr[1], scale * tb[1]);
 		++scale;
 	}
-	ft_printf("\n\n\nFINAL SCALE = %d\nright : %dpx\bot: %dpx\n", scale, scale * lr[1], scale * tb[1]);
+	ft_printf("FINAL SCALE\nleft : %d\nright : %dpx\ntop : %d\nbot: %dpx\n", lr[0], lr[1], tb[0], tb[1]);
 	return (scale);
 }
 
-void	center_map(t_map *map)
+void	center_map(t_scene *scene)
 {
-	size_t	i;
-	size_t	j;
-	t_point	center;
-
-	center = map->map[map->len / 2][map->height / 2];
-	i = 0;
-	while (i < map->height)
-	{
-		j = 0;
-		while (j < map->len)
-		{
-			map->map[i][j].x += WIDTH / 2 - center.x;
-			map->map[i][j].y += HEIGHT / 2 - center.y;
-			++j;
-		}
-		++i;
-	}
-}
-
-void	scale_map(t_map *map)
-{
-	size_t	scale;
-	size_t	i;
-	size_t	j;
-
-	i = 0;
-	scale = determine_scale(map);
-	while (i < map->height)
-	{
-		j = 0;
-		while (j < map->len)
-		{
-			map->map[i][j].x *= scale;
-			map->map[i][j].y *= scale;
-			map->map[i][j].z *= scale;
-			++j;
-		}
-		++i;
-	}
+	scene->tr[0] = (WIDTH >> 1);
+	scene->tr[1] = (HEIGHT >> 1);
 }
