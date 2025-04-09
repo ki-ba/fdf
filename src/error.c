@@ -12,6 +12,8 @@
 
 #include "fdf.h"
 #include "libft.h"
+#include "mlx.h"
+#include <stdlib.h>
 
 int	usage(void)
 {
@@ -19,16 +21,41 @@ int	usage(void)
 	return (1);
 }
 
-void	invalid_map(t_map *map)
+void	invalid_map(t_vars *vars, char last_line[])
 {
+	free(last_line);
 	ft_putstr_fd("Invalid map\n", 2);
-	free_exit(map, EXIT_FAILURE);
+	free_exit(vars, EXIT_FAILURE);
 }
 
-void	free_exit(t_map *map, int exit_status)
+void	destroy_map(t_map *map)
 {
-	if (map)
-		free(map->map);
+	size_t	i;
+
+	if (!map)
+		exit(EXIT_FAILURE);
+	i = -1;
+	while (++i < map->h_capacity)
+		free(map->map[i]);
+	free(map->map);
+}
+
+void	free_exit(t_vars *vars, int exit_status)
+{
+	if (vars->map_fd >= 0)
+		close(vars->map_fd);
+	if (!vars->scene->map)
+		exit(exit_status);
+	destroy_map(vars->scene->map);
+	if (vars->img->img)
+		mlx_destroy_image(vars->mlx, vars->img->img);
+	if (vars->win)
+		mlx_destroy_window(vars->mlx, vars->win);
+	if (vars->mlx)
+	{
+		mlx_destroy_display(vars->mlx);
+		free(vars->mlx);
+	}
 	exit(exit_status);
 }
 

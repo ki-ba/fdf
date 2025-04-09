@@ -6,7 +6,7 @@
 #    By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/01 18:45:21 by kbarru            #+#    #+#              #
-#    Updated: 2025/04/01 18:45:47 by kbarru           ###   ########lyon.fr    #
+#    Updated: 2025/04/08 17:21:22 by kbarru           ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ LIBS = -L$(MLX_DIR) -lmlx -lXext -lX11 -lm -lz -L$(LIBFT_DIR) \
 INCS = -I$(HEADER_DIR) -I$(LIBFT_DIR) -I$(MLX_DIR)
 HEADER = $(HEADER_DIR)fdf.h
 SRC = main.c parsing.c bresenham.c error.c dynamic_array_utils.c graphics.c \
-debug.c scale.c rotation.c
+debug.c scale.c rotation.c init.c point_utils.c hooks.c
 PSRC = $(addprefix $(SRC_DIR), $(SRC))
 OBJ = $(subst $(SRC_DIR), $(OBJ_DIR), $(PSRC:%.c=%.o))
 

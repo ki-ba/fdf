@@ -5,52 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/14 15:12:18 by kbarru            #+#    #+#             */
-/*   Updated: 2025/04/03 16:57:19 by kbarru           ###   ########lyon.fr   */
+/*   Created: 2025/04/09 09:47:55 by kbarru            #+#    #+#             */
+/*   Updated: 2025/04/09 09:47:57 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
-#include "libft.h"
-#include "mlx.h"
-
-void	init_map(t_map *map, int map_fd, size_t len)
-{
-	map->len = len;
-	map->height = 0;
-	map->h_capacity = 1;
-	map->map = ft_calloc(1, sizeof(t_point *));
-	if (!map->map)
-		free_exit(map, EXIT_FAILURE);
-	map->map[0] = ft_calloc(len, sizeof(t_point));
-	if (!map->map[0] || map_fd < 0)
-		free_exit(map, EXIT_FAILURE);
-}
-
-void	draw_map(t_map *map, t_data img)
-{
-	size_t		i;
-	size_t		j;
-
-	i = 0;
-	while (i < map->height)
-	{
-		j = 0;
-		while (j < map->len)
-		{
-			if (j < map->len - 1)
-			{
-				bresenham(map->map[i][j], map->map[i][j + 1], img);
-			}
-			if (i < map->height - 1)
-			{
-				bresenham(map->map[i][j], map->map[i + 1][j], img);
-			}
-			++j;
-		}
-		++i;
-	}
-}
 
 void	render_scene(t_scene *scene)
 {
@@ -59,110 +19,106 @@ void	render_scene(t_scene *scene)
 	t_map	*map;
 
 	map = scene->map;
-	i = 0;
-	while (i < map->height)
+	i = -1;
+	while (++i < map->height)
 	{
-		j = 0;
-		while (j < map->len)
+		j = -1;
+		while (++j < map->len)
 		{
-			map->map[i][j].px = map->map[i][j].x - ((map->len * 1) >> 1);
-			map->map[i][j].py = map->map[i][j].y - ((map->height * 1 )>> 1);
+			map->map[i][j].px = map->map[i][j].x - (map->len >> 1);
+			map->map[i][j].py = map->map[i][j].y - (map->height >> 1);
 			map->map[i][j].pz = map->map[i][j].z;
-			/*printf("%f, %f after origin switch\n", map->map[i][j].px, map->map[i][j].py);*/
 			map->map[i][j].px *= scene->scale;
 			map->map[i][j].py *= scene->scale;
 			map->map[i][j].pz *= scene->scale;
-			/*printf("%f, %f after scaling\n", map->map[i][j].px, map->map[i][j].py);*/
-			map->map[i][j].px += scene->tr[0];
-			map->map[i][j].py += scene->tr[1];
-			map->map[i][j].pz += scene->tr[2];
-			/*printf("%f, %f after translation\n", map->map[i][j].px, map->map[i][j].py);*/
+			apply_extrusion(*scene, &(map->map[i][j]));
+			map->map[i][j] = rotate_z(map->map[i][j], scene->rot[2]);
 			map->map[i][j] = rotate_x(map->map[i][j], scene->rot[0]);
 			map->map[i][j] = rotate_y(map->map[i][j], scene->rot[1]);
-			map->map[i][j] = rotate_z(map->map[i][j], scene->rot[2]);
-			/*map->map[i][j] = center_point(map->map[i][j]);*/
-			++j;
+			apply_translation(*scene, &(map->map[i][j]));
 		}
-		++i;
 	}
-	center_map(scene);
+	/*print_full_map(scene->map);*/
+	/*print_actions(*scene);*/
 }
 
-void	render_map(t_vars	vars)
+void	update_rot(t_vars *vars, size_t axe, double angle)
 {
-	t_data	*img;
+	double	*rot;
 
-	render_scene(vars.scene);
-	img = vars.img;
-	if (img->img)
-		mlx_destroy_image(vars.mlx, img->img);
-	img->img = mlx_new_image(vars.mlx, WIDTH, HEIGHT);
-	img->addr = mlx_get_data_addr(img->img, &img->bits_per_pixel,
-			&img->line_length, &img->endian);
-	draw_map(vars.scene->map, *img);
-	mlx_put_image_to_window(vars.mlx, vars.win, img->img, 0, 0);
+	rot = vars->scene->rot;
+	rot[axe] += angle;
+	if (rot[axe] >= 2 * M_PI)
+		rot[axe] -= 2 * M_PI;
+	if (rot[axe] <= -2 * M_PI)
+		rot[axe] += 2 * M_PI;
 }
 
-int	key_hook(int keycode, t_vars *vars)
+void	update_translation(t_vars *vars, size_t dir, int delta)
 {
-	t_map	*map;
-	t_scene	*scene;
-	int		kc;
+	double	*tr;
 
-	kc = keycode;
-	scene = vars->scene;
-	map = scene->map;
-	(void)vars;
-	if (keycode == 65307)
-		free_exit(map, EXIT_SUCCESS);
-	else if (kc == 119 || kc == 97 || kc == 115 || kc == 100)
-	{
-		if (keycode == 119)
-			scene->rot[0] = (scene->rot[0] + ANGLE);
-		else if (keycode == 97)
-			scene->rot[1] = (scene->rot[1] - ANGLE);
-		else if (keycode == 115)
-			scene->rot[0] = (scene->rot[0] - ANGLE);
-		else
-			scene->rot[1] = (scene->rot[1] + ANGLE);
-		render_scene(vars->scene);
-		render_map(*vars);
-	}
-	ft_printf("%d pressed\n", keycode);
-	print_actions(*scene);
-	return (0);
+	tr = vars->scene->tr;
+	tr[dir] += delta;
 }
 
-int	init_mlx_data(t_vars *vars)
+void	set_tr(t_vars *vars, double tx, double ty, double tz)
 {
-	t_map	*map;
+	double	*tr;
 
-	map = vars->scene->map;
-	vars->mlx = mlx_init();
-	if (!vars->mlx)
-		free_exit(map, EXIT_FAILURE);
-	vars->win = mlx_new_window(vars->mlx, WIDTH, HEIGHT, "FdF");
-	if (!vars->win)
-	{
-		mlx_destroy_window(vars->mlx, vars->win);
-		free_exit(map, EXIT_FAILURE);
-	}
-	return (0);
+	tr = vars->scene->tr;
+	tr[X_AXIS] = tx;
+	tr[Y_AXIS] = ty;
+	tr[Z_AXIS] = tz;
 }
 
-void	init_scene(t_scene *scene, int map_fd)
+void	set_scale(t_vars *vars, size_t scale)
 {
-	size_t	i;
+	vars->scene->scale = scale;
+}
 
-	i = 0;
-	read_map(scene->map, map_fd);
-	scene->scale = 1;
-	while (i < 3)
-	{
-		scene->rot[i] = 0;
-		scene->tr[i] = 0;
-		++i;
-	}
+void	update_scale(t_vars *vars, int scale_delta)
+{
+	size_t	*scale;
+	int		s_scale;
+
+	scale = &(vars->scene->scale);
+	s_scale = *scale + scale_delta;
+	printf("s_scale = %d", s_scale);
+	if (s_scale < 1)
+		*scale = 1;
+	else
+		*scale = s_scale;
+	printf("new scale : %zu\n", *scale);
+}
+
+void	set_ext(t_vars *vars, int ext)
+{
+	vars->scene->ext = ext;
+}
+
+void	update_extrusion(t_vars *vars, int ext)
+{
+	long long int	sum;
+
+	sum = vars->scene->ext + ext;
+	if (sum >= INT_MIN && sum <= INT_MAX)
+		vars->scene->ext = sum;
+	else if (sum <= INT_MIN)
+		vars->scene->ext = INT_MIN;
+	else
+		vars->scene->ext = INT_MAX;
+	vars->scene->ext = 20;
+}
+
+void	set_rot(t_vars	*vars, double ax, double ay, double az)
+{
+	double	*rot;
+
+	rot = vars->scene->rot;
+	rot[0] = ax;
+	rot[1] = ay;
+	rot[2] = az;
 }
 
 int	main(int argc, char *argv[])
@@ -170,21 +126,23 @@ int	main(int argc, char *argv[])
 	t_vars		vars;
 	t_map		map;
 	t_scene		scene;
+	t_data		img;
 
 	if (argc != 2)
 		return (usage());
+	map.h_capacity = 0;
+	map.map = NULL;
 	scene.map = &map;
-	init_scene(&scene, open_map(argv[1]));
 	vars.scene = &scene;
+	vars.img = &img;
 	vars.img->img = NULL;
-	init_mlx_data(&vars);
+	init_mlx_data(&vars, argv[1]);
 	mlx_key_hook(vars.win, key_hook, &vars);
 	scene.scale = determine_scale(scene.map);
 	center_map(&scene);
 	rotate_map(&map, 0, rotate_y);
-	print_full_map(&map);
-	render_map(vars);
+	render_map(&vars);
 	mlx_loop(vars.mlx);
-	free_exit(&map, EXIT_SUCCESS);
+	free_exit(&vars, EXIT_SUCCESS);
 	return (0);
 }

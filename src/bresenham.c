@@ -6,7 +6,7 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 09:45:44 by kbarru            #+#    #+#             */
-/*   Updated: 2025/04/03 16:26:49 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/04/08 18:02:35 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,6 @@ void	bresenham(t_point a, t_point b, t_data img)
 	a.y = (int)round(a.py);
 	b.x = (int)round(b.px);
 	b.y = (int)round(b.py);
-	/*ft_printf("bresenham : (%d, %d) to (%d, %d)\n", (int)a.x, (int)a.y, (int)b.x, (int)b.y);*/
 	if (b.x - a.x == 0)
 	{
 		bresenham_gentle(a, b, img);
