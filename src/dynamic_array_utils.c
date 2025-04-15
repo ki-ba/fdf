@@ -11,9 +11,6 @@
 /* ************************************************************************** */
 
 #include "fdf.h"
-#include "libft.h"
-#include <stdio.h>
-#include <stdlib.h>
 
 /*	@brief doubles the size of specified array in-place-ish.
 *	@brief (updates the pointer and frees the old memory)

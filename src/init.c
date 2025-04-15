@@ -6,7 +6,7 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 11:35:30 by kbarru            #+#    #+#             */
-/*   Updated: 2025/04/08 18:02:57 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/04/14 17:56:45 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	init_scene(t_vars *vars)
 		++i;
 	}
 	scene->ext = 0;
-	scene->rot[1] = DEFAULT_ROT_X;
+	scene->rot[0] = DEFAULT_ROT_X;
 	scene->rot[1] = DEFAULT_ROT_Y;
 	scene->rot[2] = DEFAULT_ROT_Z;
 }

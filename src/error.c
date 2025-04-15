@@ -6,14 +6,11 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 10:40:26 by kbarru            #+#    #+#             */
-/*   Updated: 2025/04/03 14:33:28 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/04/14 14:25:53 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
-#include "libft.h"
-#include "mlx.h"
-#include <stdlib.h>
 
 int	usage(void)
 {
@@ -40,7 +37,7 @@ void	destroy_map(t_map *map)
 	free(map->map);
 }
 
-void	free_exit(t_vars *vars, int exit_status)
+int	free_exit(t_vars *vars, int exit_status)
 {
 	if (vars->map_fd >= 0)
 		close(vars->map_fd);

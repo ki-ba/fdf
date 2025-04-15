@@ -6,21 +6,46 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 10:18:31 by kbarru            #+#    #+#             */
-/*   Updated: 2025/04/08 18:09:36 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/04/15 16:57:00 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
-#include "libft.h"
+
+void	render_scene(t_scene *scene)
+{
+	size_t	i;
+	size_t	j;
+	t_map	*map;
+	size_t	scale;
+	double	min;
+
+	scale = scene->scale;
+	map = scene->map;
+	min = get_minimum(map);
+	i = -1;
+	while (++i < map->height)
+	{
+		j = -1;
+		while (++j < map->len)
+		{
+			map->map[i][j].px = (map->map[i][j].x - (map->len >> 1)) * scale;
+			map->map[i][j].py = (map->map[i][j].y - (map->height >> 1)) * scale;
+			map->map[i][j].pz = map->map[i][j].z * scale;
+			apply_extrusion(*scene, &(map->map[i][j]), min);
+			map->map[i][j] = rotate_z(map->map[i][j], scene->rot[2]);
+			map->map[i][j] = rotate_x(map->map[i][j], scene->rot[0]);
+			map->map[i][j] = rotate_y(map->map[i][j], scene->rot[1]);
+			apply_translation(*scene, &(map->map[i][j]));
+		}
+	}
+}
 
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 {
 	char	*dst;
 
-	if (x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT)
-		/*ft_putstr_fd("warning : drawing outside of window\n", 2);*/
-		;
-	else
+	if (!(x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT))
 	{
 		dst = data->addr;
 		dst += (y * data->line_length + x * (data->bits_per_pixel / 8));
@@ -32,8 +57,10 @@ void	draw_map(t_map *map, t_data img)
 {
 	size_t		i;
 	size_t		j;
+	t_point		**arr;
 
 	i = 0;
+	arr = map->map;
 	while (i < map->height)
 	{
 		j = 0;
@@ -41,11 +68,11 @@ void	draw_map(t_map *map, t_data img)
 		{
 			if (j < map->len - 1)
 			{
-				bresenham(map->map[i][j], map->map[i][j + 1], img);
+				bresenham(map->max - map->min, arr[i][j], arr[i][j + 1], img);
 			}
 			if (i < map->height - 1)
 			{
-				bresenham(map->map[i][j], map->map[i + 1][j], img);
+				bresenham(map->max - map->min, arr[i][j], arr[i + 1][j], img);
 			}
 			++j;
 		}
@@ -53,11 +80,14 @@ void	draw_map(t_map *map, t_data img)
 	}
 }
 
-int	z_to_color(int value)
+int	z_to_color(int diff, double value)
 {
-	int	color;
+	int		color;
 
-	color = (0x00ffffff & (value + 0x00505050));
+	if (diff == 0 || value == 0)
+		color = 0x00707070;
+	else
+		color = (value * (INT_MAX / diff));
 	return (color);
 }
 
@@ -77,4 +107,3 @@ void	render_map(t_vars	*vars)
 	draw_map(vars->scene->map, *img);
 	mlx_put_image_to_window(vars->mlx, vars->win, img->img, 0, 0);
 }
-

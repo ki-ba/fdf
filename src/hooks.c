@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "fdf.h"
-#include "libft.h"
 
 void	key_hook_ext(int kc, t_vars *vars)
 {

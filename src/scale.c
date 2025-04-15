@@ -6,13 +6,13 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 17:57:26 by kbarru            #+#    #+#             */
-/*   Updated: 2025/04/08 17:39:30 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/04/15 16:52:46 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-void	get_horizontal_bounds(t_map map, int lr[2])
+static void	get_horizontal_bounds(t_map map, int lr[2])
 {
 	size_t	i;
 	size_t	j;
@@ -37,7 +37,7 @@ void	get_horizontal_bounds(t_map map, int lr[2])
 	}
 }
 
-void	get_vertical_bounds(t_map map, int tb[2])
+static void	get_vertical_bounds(t_map map, int tb[2])
 {
 	size_t	i;
 	size_t	j;
@@ -72,14 +72,15 @@ size_t	determine_scale(t_map *map)
 	int		hd;
 	size_t	scale;
 
-	/*ft_printf("map is %d x %d\n", map->len, map->height);*/
 	get_vertical_bounds(*map, lr);
 	get_horizontal_bounds(*map, tb);
 	vd = tb[1] - tb[0];
 	hd = lr[1] - lr[0];
 	scale = 1;
-	while (scale * hd < 0.7 * WIDTH && scale * vd < 0.7 * HEIGHT)
+	while (vd + hd > 0 && scale * hd < 0.7 * WIDTH && scale * vd < 0.7 * HEIGHT)
+	{
 		++scale;
+	}
 	return (scale);
 }
 

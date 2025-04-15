@@ -6,7 +6,7 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 16:28:02 by kbarru            #+#    #+#             */
-/*   Updated: 2025/04/08 18:11:47 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/04/15 16:52:35 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@
 #  define HEIGHT 1080
 # endif
 
-# define ANGLE 0.39269908169 
+# define ANGLE 0.39269908169
 
 # ifndef INT_MIN
 #  define INT_MIN -2147483648
@@ -35,8 +35,8 @@
 #  define INT_MAX 2147483647
 # endif
 
-# define DEFAULT_ROT_X 0
-# define DEFAULT_ROT_Y 1.17
+# define DEFAULT_ROT_X 0.79
+# define DEFAULT_ROT_Y 0.38
 # define DEFAULT_ROT_Z 2
 
 # define X_AXIS 0
@@ -55,6 +55,7 @@ typedef struct s_data
 	int		line_length;
 	int		endian;
 }			t_data;
+
 typedef struct s_point
 {
 	double	x;
@@ -76,6 +77,8 @@ typedef struct s_map
 	size_t	len;
 	size_t	height;
 	size_t	h_capacity;
+	double	min;
+	double	max;
 	t_point	**map;
 }			t_map;
 
@@ -97,45 +100,31 @@ typedef struct s_vars
 	t_scene	*scene;
 }			t_vars;
 
-/* main.c */
-void	init_map(t_vars *vars, size_t len);
-void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
-void	print_full_map(t_map *map);
-
-
 /* parsing.c */
-t_point	create_point(double x, double y, double z);
-void	count_map_height(t_map map, char map_filename[]);
-void	read_map(t_vars *vars);
-t_point	project_point(t_point point);
-void	print_arr(char **map);
-void	print_arr_int(int **arr);
-int		**convert_map(char **map);
-int		get_value(char *map, int y);
+/*static size_t count_words(char *s, char sep);*/
+int		check_arg(char *str);
 int		open_map(char map_filename[]);
-int		ft_strlen_ws(char *str);
-size_t	count_words(char *s, char sep);
-void	set_map_dimensions(t_map *map, char map_filename[]);
+void	read_map(t_vars *vars);
 
 /* bresenham.c */
-void	bresenham(t_point a, t_point b, t_data img);
+void	bresenham(int diff, t_point a, t_point b, t_data img);
 
 /* error.c */
 void	invalid_map(t_vars *vars, char last_line[]);
 int		usage(void);
-void	free_exit(t_vars *vars, int exit_status);
+void	destroy_map(t_map *map);
+int		free_exit(t_vars *vars, int exit_status);
 void	free_arr(t_point **arr, size_t n);
-/* main.c */
-void	print_full_map(t_map *map);
 
 /* dynamic_array_utils.c */
 void	double_array_size(t_vars *vars);
 
 /* graphics.c */
+void	render_scene(t_scene *scene);
+void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
 void	draw_map(t_map *map, t_data img);
-int		z_to_color(int value);
-void	print_square(t_data img, t_point origin, int size, int fill);
-void	render_map(t_vars	*vars);
+int		z_to_color(int diff, double value);
+void	render_map(t_vars *vars);
 
 /* init.c */
 void	init_map(t_vars *vars, size_t len);
@@ -144,37 +133,39 @@ int		init_mlx_data(t_vars *vars, char map_filename[]);
 
 /* scale.c */
 size_t	determine_scale(t_map *map);
-void	translate_map(t_scene scene, int offset_x, int offset_y);
-t_point	center_point(t_point p0);
 void	center_map(t_scene *scene);
-/* rotation.c */
 
+/* rotation.c */
 void	rotate_map(t_map *map, double a, t_point (*r_f)(t_point pt, double a));
 t_point	rotate_x(t_point p0, double a);
 t_point	rotate_y(t_point p0, double a);
 t_point	rotate_z(t_point p0, double a);
 
 /* point_utils.c */
-
 t_point	create_point(double x, double y, double z);
 int		get_value(char *line, int x);
 void	apply_translation(t_scene scene, t_point *point);
+void	apply_extrusion(t_scene scene, t_point *point, double min);
+
+/* point_utils_2.c */
+double	get_minimum(t_map *map);
+double	get_maximum(t_map *map);
 
 /* hooks.c */
 int		key_hook_2(int keycode, t_vars *vars);
 int		key_hook(int keycode, t_vars *vars);
 
-/* main.c */
-void	update_scale(t_vars	*vars, int scale_delta);
-void	render_scene(t_scene *scene);
-void	apply_extrusion(t_scene scene, t_point *point);
-void	update_rot(t_vars *vars, size_t axe, double angle);
-void	update_translation(t_vars *vars, size_t dir, int delta);
-void	set_rot(t_vars	*vars, double ax, double ay, double az);
-void	set_tr(t_vars	*vars, double tx, double ty, double tz);
+/* setters.c */
+
+void	set_tr(t_vars *vars, double tx, double ty, double tz);
 void	set_scale(t_vars *vars, size_t scale);
 void	set_ext(t_vars *vars, int ext);
-/* debug.c */
-void	print_actions(t_scene scene);
+void	set_rot(t_vars *vars, double ax, double ay, double az);
+
+/* updaters.c */
+void	update_rot(t_vars *vars, size_t axe, double angle);
+void	update_translation(t_vars *vars, size_t dir, int delta);
+void	update_scale(t_vars *vars, int scale_delta);
+void	update_extrusion(t_vars *vars, int ext);
 
 #endif
