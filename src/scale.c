@@ -77,10 +77,10 @@ size_t	determine_scale(t_map *map)
 	vd = tb[1] - tb[0];
 	hd = lr[1] - lr[0];
 	scale = 1;
-	while (vd + hd > 0 && scale * hd < 0.7 * WIDTH && scale * vd < 0.7 * HEIGHT)
-	{
+	while (vd + hd > 0 && scale * hd < 0.7 * WIDTH && scale * hd < 0.7 * HEIGHT)
 		++scale;
-	}
+	if (scale > 50)
+		return (50);
 	return (scale);
 }
 

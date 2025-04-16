@@ -6,7 +6,7 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 10:18:31 by kbarru            #+#    #+#             */
-/*   Updated: 2025/04/15 16:57:00 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/04/16 18:39:17 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,17 +78,6 @@ void	draw_map(t_map *map, t_data img)
 		}
 		++i;
 	}
-}
-
-int	z_to_color(int diff, double value)
-{
-	int		color;
-
-	if (diff == 0 || value == 0)
-		color = 0x00707070;
-	else
-		color = (value * (INT_MAX / diff));
-	return (color);
 }
 
 void	render_map(t_vars	*vars)

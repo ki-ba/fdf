@@ -6,11 +6,23 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 18:14:56 by kbarru            #+#    #+#             */
-/*   Updated: 2025/04/08 17:25:49 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/04/16 18:43:33 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
+
+size_t	ft_strlen_c(char str[], char c)
+{
+	size_t	i;
+
+	i = 0;
+	while (str[i] && str[i] != c)
+		++i;
+	if (str[i] != c)
+		return (0);
+	return (i);
+}
 
 /*	@brief doubles the size of specified array in-place-ish.
 *	@brief (updates the pointer and frees the old memory)

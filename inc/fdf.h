@@ -6,7 +6,7 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 16:28:02 by kbarru            #+#    #+#             */
-/*   Updated: 2025/04/15 16:52:35 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/04/16 18:43:02 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@
 #  define INT_MAX 2147483647
 # endif
 
-# define DEFAULT_ROT_X 0.79
-# define DEFAULT_ROT_Y 0.38
-# define DEFAULT_ROT_Z 2
+# define DEFAULT_ROT_X 0.39269908169
+# define DEFAULT_ROT_Y 0
+# define DEFAULT_ROT_Z 0.79
 
 # define X_AXIS 0
 # define Y_AXIS 1
@@ -46,6 +46,8 @@
 # define DEF_TR_STEP 50
 # define DEF_SCALE_STEP 1
 # define DEF_EXT_STEP 1
+
+# define DEF_COLOR 0x00808080
 
 typedef struct s_data
 {
@@ -64,6 +66,7 @@ typedef struct s_point
 	double	px;
 	double	py;
 	double	pz;
+	int		color;
 }			t_point;
 
 typedef struct s_dir
@@ -101,8 +104,8 @@ typedef struct s_vars
 }			t_vars;
 
 /* parsing.c */
-/*static size_t count_words(char *s, char sep);*/
 int		check_arg(char *str);
+size_t	ft_strlen_c(char str[], char c);
 int		open_map(char map_filename[]);
 void	read_map(t_vars *vars);
 
@@ -116,7 +119,8 @@ void	destroy_map(t_map *map);
 int		free_exit(t_vars *vars, int exit_status);
 void	free_arr(t_point **arr, size_t n);
 
-/* dynamic_array_utils.c */
+/* utils.c */
+size_t	ft_strlen_c(char str[], char c);
 void	double_array_size(t_vars *vars);
 
 /* graphics.c */
@@ -142,7 +146,7 @@ t_point	rotate_y(t_point p0, double a);
 t_point	rotate_z(t_point p0, double a);
 
 /* point_utils.c */
-t_point	create_point(double x, double y, double z);
+t_point	create_point(double x, double y, double z, int color);
 int		get_value(char *line, int x);
 void	apply_translation(t_scene scene, t_point *point);
 void	apply_extrusion(t_scene scene, t_point *point, double min);

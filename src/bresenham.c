@@ -6,31 +6,11 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 09:45:44 by kbarru            #+#    #+#             */
-/*   Updated: 2025/04/15 16:57:53 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/04/16 18:39:35 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
-
-static int	create_color(t_point a, t_point b, int diff, char axis)
-{
-	double	val;
-
-	if (axis == 'x')
-	{
-		if (a.x == b.x)
-			return (z_to_color(diff, 0));
-		else
-			val = (b.z - a.z) / (b.x - a.x);
-	}
-	else if (a.y == b.y)
-		return (z_to_color(diff, 0));
-	else
-		val = (b.z - a.z) / (b.y - a.y);
-	if (val == 0)
-		return (z_to_color(diff, 0));
-	return (z_to_color(diff, val));
-}
 
 static void	init_dir(t_dir *dir, t_point a, t_point b)
 {
@@ -74,7 +54,7 @@ static void	bresenham_gentle(int diff, t_point a, t_point b, t_data img)
 			d += (2 * dy - 2 * dx);
 			a.y += dir.y;
 		}
-		my_mlx_pixel_put(&img, a.x, a.y, create_color(a, b, diff, 'x'));
+		my_mlx_pixel_put(&img, a.x, a.y, DEF_COLOR);
 		a.x += dir.x;
 	}
 }
@@ -100,7 +80,7 @@ static void	bresenham_steep(int diff, t_point a, t_point b, t_data img)
 			d += (2 * dx - 2 * dy);
 			a.x += dir.x;
 		}
-		my_mlx_pixel_put(&img, a.x, a.y, create_color(a, b, diff, 'y'));
+		my_mlx_pixel_put(&img, a.x, a.y, DEF_COLOR);
 		a.y += dir.y;
 	}
 }

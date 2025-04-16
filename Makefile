@@ -25,7 +25,7 @@ LIBS = -L$(MLX_DIR) -lmlx -lXext -lX11 -lm -lz -L$(LIBFT_DIR) \
 -lft -L$(MATRIX_DIR) -lmatrix
 INCS = -I$(HEADER_DIR) -I$(LIBFT_DIR) -I$(MLX_DIR)
 HEADER = $(HEADER_DIR)fdf.h
-SRC = main.c parsing.c bresenham.c error.c dynamic_array_utils.c graphics.c \
+SRC = main.c parsing.c bresenham.c error.c utils.c graphics.c \
 scale.c rotation.c init.c point_utils.c point_utils_2.c hooks.c setters.c \
 updaters.c
 PSRC = $(addprefix $(SRC_DIR), $(SRC))
@@ -65,7 +65,6 @@ $(MATRIX_DIR)libmatrix.a:
 
 $(NAME): $(LIBFT_DIR)libft.a $(OBJ)
 	$(CC) $(FLAGS) $(OBJ) $(LIBS) $(INCS) -o $(NAME)
-
 
 # === DEBUG === #
 

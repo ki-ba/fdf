@@ -6,32 +6,32 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 13:13:41 by kbarru            #+#    #+#             */
-/*   Updated: 2025/04/14 14:26:13 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/04/16 18:42:29 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 #include "libft.h"
+#include <fcntl.h>
+#include <stdlib.h>
 
 static size_t	count_words(char *s, char sep)
 {
 	size_t	size;
 	int		i;
-	int		is_first_char;
 
-	is_first_char = 1;
 	i = 0;
 	size = 0;
-	while (s[i])
+	while (s[i] && s[i] != '\n')
 	{
-		if (s[i] == sep)
-			is_first_char = 1;
-		else if (is_first_char)
+		if (ft_is_in(s[i], "0123456789ABCDEF-,"))
 		{
 			++size;
-			is_first_char = 0;
+			while (s[i] && s[i] != sep)
+				++i;
 		}
-		++i;
+		while (s[i] && !ft_is_in(s[i], "0123456789ABCDEF-,"))
+			++i;
 	}
 	return (size);
 }
@@ -58,10 +58,33 @@ int	open_map(char map_filename[])
 	return (map_fd);
 }
 
+void	populate_line(t_vars *vars, char **split, size_t row)
+{
+	size_t	col;
+	int		color;
+	char	*color_s;
+	t_point	**map;
+
+	if (!split)
+		free_exit(vars, EXIT_FAILURE);
+	map = vars->scene->map->map;
+	col = 0;
+	while (col < vars->scene->map->len)
+	{
+		color = 0;
+		color_s = NULL;
+		color_s = ft_strnstr(split[col], ",", vars->scene->map->len);
+		if (color)
+			color = ft_atoi_base(color_s + 3, "0123456789ABCDEF");
+		map[row][col] = create_point(col, row, ft_atoi(split[col]), color);
+		++col;
+	}
+	ft_free_arr(split);
+}
+
 void	read_map(t_vars *vars)
 {
 	char	*line;
-	size_t	col;
 	size_t	row;
 	t_map	*map;
 
@@ -78,9 +101,7 @@ void	read_map(t_vars *vars)
 		if ((row + 1) > map->h_capacity)
 			double_array_size(vars);
 		map->height = row + 1;
-		col = -1;
-		while (++col < map->len)
-			map->map[row][col] = create_point(col, row, get_value(line, col));
+		populate_line(vars, ft_split(line, ' '), row);
 		free(line);
 		++row;
 		line = get_next_line(vars->map_fd);

@@ -12,7 +12,7 @@
 
 #include "fdf.h"
 
-t_point	create_point(double x, double y, double z)
+t_point	create_point(double x, double y, double z, int color)
 {
 	t_point	point;
 
@@ -22,6 +22,7 @@ t_point	create_point(double x, double y, double z)
 	point.px = x;
 	point.py = y;
 	point.pz = z;
+	point.color = color;
 	return (point);
 }
 
@@ -37,9 +38,7 @@ int	get_value(char *line, int x)
 	word_index = 0;
 	while (word_index < x && i < map_len)
 	{
-		if (line[i] == ' ')
-			++word_index;
-		++i;
+		i += ft_strlen_c(line, ' ');
 	}
 	n = ft_atoi(line + i);
 	return (n);
