@@ -104,6 +104,7 @@ typedef struct s_vars
 }			t_vars;
 
 /* parsing.c */
+size_t	count_words(char *s, char sep);
 int		check_arg(char *str);
 size_t	ft_strlen_c(char str[], char c);
 int		open_map(char map_filename[]);
@@ -134,7 +135,7 @@ int		z_to_color(int diff, double value);
 void	render_map(t_vars *vars);
 
 /* init.c */
-void	init_map(t_vars *vars, size_t len);
+void	init_map(t_vars *vars, char line[]);
 void	init_scene(t_vars *vars);
 int		init_mlx_data(t_vars *vars, char map_filename[]);
 

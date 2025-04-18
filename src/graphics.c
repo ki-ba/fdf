@@ -110,6 +110,8 @@ void	render_map(t_vars	*vars)
 		free_exit(vars, EXIT_FAILURE);
 	img->addr = mlx_get_data_addr(img->img, &img->bits_per_pixel,
 			&img->line_length, &img->endian);
+	if (!img->addr)
+		free_exit(vars, EXIT_FAILURE);
 	draw_map(vars->scene->map, *img);
 	mlx_put_image_to_window(vars->mlx, vars->win, img->img, 0, 0);
 }

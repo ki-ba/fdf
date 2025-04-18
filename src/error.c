@@ -34,9 +34,12 @@ void	destroy_map(t_map *map)
 
 	if (!map)
 		exit(EXIT_FAILURE);
-	i = -1;
-	while (++i < map->h_capacity)
-		free(map->map[i]);
+	if (map->map)
+	{
+		i = -1;
+		while (++i < map->h_capacity)
+			free(map->map[i]);
+	}
 	free(map->map);
 }
 

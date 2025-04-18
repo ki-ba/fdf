@@ -11,17 +11,16 @@
 /* ************************************************************************** */
 
 #include "fdf.h"
-#include <stdlib.h>
 
 /**
  * @brief initialize the map with a given len. Allocates the actual array.
  */
-void	init_map(t_vars *vars, size_t len)
+void	init_map(t_vars *vars, char line[])
 {
 	t_map	*map;
 
 	map = vars->scene->map;
-	map->len = len;
+	map->len = count_words(line, ' ');
 	map->height = 0;
 	map->h_capacity = 1;
 	if (vars->map_fd < 0)
@@ -31,10 +30,16 @@ void	init_map(t_vars *vars, size_t len)
 	}
 	map->map = ft_calloc(1, sizeof(t_point *));
 	if (!map->map)
+	{
+		free(line);
 		free_exit(vars, EXIT_FAILURE);
-	map->map[0] = ft_calloc(len, sizeof(t_point));
+	}
+	map->map[0] = ft_calloc(map->len, sizeof(t_point));
 	if (!map->map[0] || vars->map_fd < 0)
+	{
+		free(line);
 		free_exit(vars, EXIT_FAILURE);
+	}
 }
 
 /**
@@ -79,9 +84,6 @@ int	init_mlx_data(t_vars *vars, char map_filename[])
 	init_scene(vars);
 	vars->win = mlx_new_window(vars->mlx, WIDTH, HEIGHT, "FdF");
 	if (!vars->win)
-	{
-		mlx_destroy_window(vars->mlx, vars->win);
 		free_exit(vars, EXIT_FAILURE);
-	}
 	return (0);
 }

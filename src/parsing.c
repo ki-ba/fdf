@@ -12,7 +12,7 @@
 
 #include "fdf.h"
 
-static size_t	count_words(char *s, char sep)
+size_t	count_words(char *s, char sep)
 {
 	size_t	size;
 	int		i;
@@ -111,7 +111,7 @@ void	read_map(t_vars *vars)
 	line = get_next_line(vars->map_fd);
 	if (!line)
 		invalid_map(vars, NULL);
-	init_map(vars, count_words(line, ' '));
+	init_map(vars, line);
 	while (line)
 	{
 		if (count_words(line, ' ') != map->len)
