@@ -12,6 +12,7 @@
 
 #include "fdf.h"
 
+/* @brief debugging function. Prints the current map array. (projected values */
 void	print_full_map(t_map *map)
 {
 	size_t	i;
@@ -41,6 +42,7 @@ void	print_full_map(t_map *map)
 	ft_printf("\nmap is :		%d * %d\n", map->height, map->len);
 }
 
+/* @brief debugging function. prints the current scene actions. */
 void	print_actions(t_scene scene)
 {
 	printf("rot : {%.2f, %.2f, %.2f}\n", scene.rot[0], scene.rot[1], scene.rot[2]);

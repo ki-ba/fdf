@@ -13,6 +13,9 @@
 #include "fdf.h"
 #include <stdlib.h>
 
+/**
+ * @brief initialize the map with a given len. Allocates the actual array.
+ */
 void	init_map(t_vars *vars, size_t len)
 {
 	t_map	*map;
@@ -33,6 +36,10 @@ void	init_map(t_vars *vars, size_t len)
 	if (!map->map[0] || vars->map_fd < 0)
 		free_exit(vars, EXIT_FAILURE);
 }
+
+/**
+ * @brief initialize the scene with default values contained in .h file.
+*/
 
 void	init_scene(t_vars *vars)
 {
@@ -55,6 +62,10 @@ void	init_scene(t_vars *vars)
 	scene->rot[2] = DEFAULT_ROT_Z;
 }
 
+/**
+	* @brief initializer. Opens map file, creates an mlx display
+	* @brief and a window.
+*/
 int	init_mlx_data(t_vars *vars, char map_filename[])
 {
 	vars->win = NULL;

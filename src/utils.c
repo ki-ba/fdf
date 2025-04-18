@@ -12,6 +12,10 @@
 
 #include "fdf.h"
 
+/**
+ * @brief calculates the length of current string until next occurence of
+ * @brief the given char, or nullbyte, whichever occurs first.
+ */
 size_t	ft_strlen_c(char str[], char c)
 {
 	size_t	i;
@@ -24,8 +28,9 @@ size_t	ft_strlen_c(char str[], char c)
 	return (i);
 }
 
-/*	@brief doubles the size of specified array in-place-ish.
-*	@brief (updates the pointer and frees the old memory)
+/**
+ * @brief doubles the size of specified array in-place-ish.
+ * @brief (updates the pointer and frees the old memory)
 */
 void	double_array_size(t_vars *vars)
 {

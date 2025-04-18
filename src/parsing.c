@@ -11,9 +11,6 @@
 /* ************************************************************************** */
 
 #include "fdf.h"
-#include "libft.h"
-#include <fcntl.h>
-#include <stdlib.h>
 
 static size_t	count_words(char *s, char sep)
 {
@@ -36,6 +33,10 @@ static size_t	count_words(char *s, char sep)
 	return (size);
 }
 
+/*
+	* @brief checks wether given string is of type "foo.fdf".
+	* @brief ".fdf" is considered incorrect.
+*/
 int	check_arg(char *str)
 {
 	char	*dot_ptr;
@@ -48,6 +49,10 @@ int	check_arg(char *str)
 	return (*(dot_ptr + 4) != '\0' || ft_strlen(str) <= 4);
 }
 
+/*
+	* @brief opens file of given filename. Prints an error if opening
+	* @brief failed. On success, return obtained fd.
+*/
 int	open_map(char map_filename[])
 {
 	int	map_fd;
@@ -58,6 +63,14 @@ int	open_map(char map_filename[])
 	return (map_fd);
 }
 
+/*
+	* @brief populates a given line of the map array with values from
+	* @brief the provided array of strings.
+	* @param row the number of line to populate (i.e the ordinate of
+	* @param row the points to be read).
+	* @param split the "numbers" to get in the map, as strings in an
+	* @param split an array.
+*/
 void	populate_line(t_vars *vars, char **split, size_t row)
 {
 	size_t	col;
@@ -82,6 +95,11 @@ void	populate_line(t_vars *vars, char **split, size_t row)
 	ft_free_arr(split);
 }
 
+/*
+	* @brief populates the map array with values from the map file.
+	* @brief the map array grows as necessary by doubling its size
+	* @brief when needed.
+*/
 void	read_map(t_vars *vars)
 {
 	char	*line;

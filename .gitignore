@@ -1,5 +1,5 @@
 .obj
-minilibx-linux
+fdf_test_files
 *.fdf
 *.json
 *.sh

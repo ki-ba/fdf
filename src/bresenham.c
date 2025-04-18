@@ -6,12 +6,16 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 09:45:44 by kbarru            #+#    #+#             */
-/*   Updated: 2025/04/16 18:39:35 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/04/18 10:21:12 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
+/*	@brief intializes a direction variable for bresenham algorithm.
+	@brief used to be able to writes lines that go in any direction,
+	@brief and not only top to bottom or left to right.
+*/
 static void	init_dir(t_dir *dir, t_point a, t_point b)
 {
 	int	dx;
@@ -33,14 +37,16 @@ static void	init_dir(t_dir *dir, t_point a, t_point b)
 		dir->x = 1;
 }
 
-static void	bresenham_gentle(int diff, t_point a, t_point b, t_data img)
+/*	@brief bresenham algorithm for gentle lines.
+ *	@brief increases y by 1 each several x's.
+ */
+static void	bresenham_gentle(t_point a, t_point b, t_data img)
 {
 	int		d;
 	int		dy;
 	int		dx;
 	t_dir	dir;
 
-	(void)diff;
 	init_dir(&dir, a, b);
 	dy = fabs(b.y - a.y);
 	dx = fabs(b.x - a.x);
@@ -59,14 +65,16 @@ static void	bresenham_gentle(int diff, t_point a, t_point b, t_data img)
 	}
 }
 
-static void	bresenham_steep(int diff, t_point a, t_point b, t_data img)
+/*	@brief bresenham algorithm for steep lines.
+ *	@brief increases x by 1 each several y's.
+ */
+static void	bresenham_steep(t_point a, t_point b, t_data img)
 {
 	int		d;
 	int		dy;
 	int		dx;
 	t_dir	dir;
 
-	(void)diff;
 	init_dir(&dir, a, b);
 	dy = fabs(b.y - a.y);
 	dx = fabs(b.x - a.x);
@@ -85,7 +93,12 @@ static void	bresenham_steep(int diff, t_point a, t_point b, t_data img)
 	}
 }
 
-void	bresenham(int diff, t_point a, t_point b, t_data img)
+/*	@brief draws a line between the two points a and b on the image img.
+*	@param a the point to draw from.
+*	@param b the point to draw to.
+*	@param img the image to draw in.
+*/
+void	bresenham(t_point a, t_point b, t_data img)
 {
 	double	m;
 
@@ -95,12 +108,12 @@ void	bresenham(int diff, t_point a, t_point b, t_data img)
 	b.y = (int)round(b.py);
 	if (b.x - a.x == 0)
 	{
-		bresenham_gentle(diff, a, b, img);
+		bresenham_gentle(a, b, img);
 		return ;
 	}
 	m = (b.y - a.y) / (b.x - a.x);
 	if (m > -1 && m < 1)
-		bresenham_gentle(diff, a, b, img);
+		bresenham_gentle(a, b, img);
 	else
-		bresenham_steep(diff, a, b, img);
+		bresenham_steep(a, b, img);
 }

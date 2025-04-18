@@ -6,18 +6,20 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 10:40:26 by kbarru            #+#    #+#             */
-/*   Updated: 2025/04/14 14:25:53 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/04/18 11:25:59 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
+/* @brief displays an explicative usage message. */
 int	usage(void)
 {
 	ft_putstr_fd("Usage : ./fdf <map_name.fdf>\n", 1);
 	return (1);
 }
 
+/* @brief displays an error message then exits whith error status. */
 void	invalid_map(t_vars *vars, char last_line[])
 {
 	free(last_line);
@@ -25,6 +27,7 @@ void	invalid_map(t_vars *vars, char last_line[])
 	free_exit(vars, EXIT_FAILURE);
 }
 
+/* @brief frees the given t_map. */
 void	destroy_map(t_map *map)
 {
 	size_t	i;
@@ -37,6 +40,9 @@ void	destroy_map(t_map *map)
 	free(map->map);
 }
 
+/*	@brief frees the map, all mlx data, closes the fd then exits
+	@brief with given status.
+*/
 int	free_exit(t_vars *vars, int exit_status)
 {
 	if (vars->map_fd >= 0)
@@ -56,6 +62,7 @@ int	free_exit(t_vars *vars, int exit_status)
 	exit(exit_status);
 }
 
+/* @brief frees given array of t_point) */
 void	free_arr(t_point **arr, size_t n)
 {
 	size_t	i;

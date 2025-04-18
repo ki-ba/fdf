@@ -6,12 +6,15 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 10:18:31 by kbarru            #+#    #+#             */
-/*   Updated: 2025/04/16 18:39:17 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/04/18 11:22:25 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
+/*
+	@brief renders scene properties to the actual map.
+*/
 void	render_scene(t_scene *scene)
 {
 	size_t	i;
@@ -41,6 +44,12 @@ void	render_scene(t_scene *scene)
 	}
 }
 
+/*
+	@brief puts a pixel on current image.
+	@brief includes protection if coordinates exceed image bounds.
+	@param data the image data.
+*/
+
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 {
 	char	*dst;
@@ -52,6 +61,10 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 		*(unsigned int *)dst = color;
 	}
 }
+
+/*
+	@brief draws the given map in given img.
+*/
 
 void	draw_map(t_map *map, t_data img)
 {
@@ -68,11 +81,11 @@ void	draw_map(t_map *map, t_data img)
 		{
 			if (j < map->len - 1)
 			{
-				bresenham(map->max - map->min, arr[i][j], arr[i][j + 1], img);
+				bresenham(arr[i][j], arr[i][j + 1], img);
 			}
 			if (i < map->height - 1)
 			{
-				bresenham(map->max - map->min, arr[i][j], arr[i + 1][j], img);
+				bresenham(arr[i][j], arr[i + 1][j], img);
 			}
 			++j;
 		}
@@ -80,6 +93,10 @@ void	draw_map(t_map *map, t_data img)
 	}
 }
 
+/*
+	@brief computes the map according to the scene, destroys old image,
+	@brief then creates a new one and draws the map inside.
+*/
 void	render_map(t_vars	*vars)
 {
 	t_data	*img;

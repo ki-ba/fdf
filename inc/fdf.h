@@ -6,7 +6,7 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 16:28:02 by kbarru            #+#    #+#             */
-/*   Updated: 2025/04/16 18:43:02 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/04/18 10:21:50 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,8 +109,11 @@ size_t	ft_strlen_c(char str[], char c);
 int		open_map(char map_filename[]);
 void	read_map(t_vars *vars);
 
+/* parsing_2.c */
+int		get_value(char *line, int x);
+
 /* bresenham.c */
-void	bresenham(int diff, t_point a, t_point b, t_data img);
+void	bresenham(t_point a, t_point b, t_data img);
 
 /* error.c */
 void	invalid_map(t_vars *vars, char last_line[]);
@@ -140,14 +143,12 @@ size_t	determine_scale(t_map *map);
 void	center_map(t_scene *scene);
 
 /* rotation.c */
-void	rotate_map(t_map *map, double a, t_point (*r_f)(t_point pt, double a));
 t_point	rotate_x(t_point p0, double a);
 t_point	rotate_y(t_point p0, double a);
 t_point	rotate_z(t_point p0, double a);
 
 /* point_utils.c */
 t_point	create_point(double x, double y, double z, int color);
-int		get_value(char *line, int x);
 void	apply_translation(t_scene scene, t_point *point);
 void	apply_extrusion(t_scene scene, t_point *point, double min);
 
@@ -156,7 +157,6 @@ double	get_minimum(t_map *map);
 double	get_maximum(t_map *map);
 
 /* hooks.c */
-int		key_hook_2(int keycode, t_vars *vars);
 int		key_hook(int keycode, t_vars *vars);
 
 /* setters.c */

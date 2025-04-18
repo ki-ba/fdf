@@ -6,24 +6,31 @@
 /*   By: kbarru <kbarru@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 14:22:34 by kbarru            #+#    #+#             */
-/*   Updated: 2025/04/14 14:22:59 by kbarru           ###   ########lyon.fr   */
+/*   Updated: 2025/04/18 10:19:59 by kbarru           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-void	update_rot(t_vars *vars, size_t axe, double angle)
+/*
+	@brief adds `angle` to the scene rotation on given axis
+	@brief and mods it by 2*pi.
+*/
+void	update_rot(t_vars *vars, size_t axis, double angle)
 {
 	double	*rot;
 
 	rot = vars->scene->rot;
-	rot[axe] += angle;
-	if (rot[axe] >= 2 * M_PI)
-		rot[axe] -= 2 * M_PI;
-	if (rot[axe] <= -2 * M_PI)
-		rot[axe] += 2 * M_PI;
+	rot[axis] += angle;
+	if (rot[axis] >= 2 * M_PI)
+		rot[axis] -= 2 * M_PI;
+	if (rot[axis] <= -2 * M_PI)
+		rot[axis] += 2 * M_PI;
 }
 
+/*
+	@brief adds `delta` to the scene translationon given direction.
+*/
 void	update_translation(t_vars *vars, size_t dir, int delta)
 {
 	double	*tr;
@@ -32,6 +39,9 @@ void	update_translation(t_vars *vars, size_t dir, int delta)
 	tr[dir] += delta;
 }
 
+/*
+	@brief adds `scale_delta` to current scene scale.
+*/
 void	update_scale(t_vars *vars, int scale_delta)
 {
 	size_t	*scale;
@@ -45,6 +55,9 @@ void	update_scale(t_vars *vars, int scale_delta)
 		*scale = s_scale;
 }
 
+/*
+	@brief adds `ext` to current scene extrusion.
+*/
 void	update_extrusion(t_vars *vars, int ext)
 {
 	long long int	sum;

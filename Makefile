@@ -26,14 +26,17 @@ LIBS = -L$(MLX_DIR) -lmlx -lXext -lX11 -lm -lz -L$(LIBFT_DIR) \
 INCS = -I$(HEADER_DIR) -I$(LIBFT_DIR) -I$(MLX_DIR)
 HEADER = $(HEADER_DIR)fdf.h
 SRC = main.c parsing.c bresenham.c error.c utils.c graphics.c \
-scale.c rotation.c init.c point_utils.c point_utils_2.c hooks.c setters.c \
+scale.c rotation.c init.c point_utils.c hooks.c setters.c \
 updaters.c
 PSRC = $(addprefix $(SRC_DIR), $(SRC))
 OBJ = $(subst $(SRC_DIR), $(OBJ_DIR), $(PSRC:%.c=%.o))
 
 .PHONY = all clean fclean re lib run
 
-all : $(NAME)
+all :
+	$(MAKE) -C $(MLX_DIR)
+	$(MAKE) -C $(LIBFT_DIR)
+	$(MAKE) $(NAME)
 
 clean:
 	$(MAKE) -C $(LIBFT_DIR) clean
@@ -65,8 +68,3 @@ $(MATRIX_DIR)libmatrix.a:
 
 $(NAME): $(LIBFT_DIR)libft.a $(OBJ)
 	$(CC) $(FLAGS) $(OBJ) $(LIBS) $(INCS) -o $(NAME)
-
-# === DEBUG === #
-
-run: all
-	./fdf maps/pyramide.fdf

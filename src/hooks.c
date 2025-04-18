@@ -12,7 +12,10 @@
 
 #include "fdf.h"
 
-void	key_hook_ext(int kc, t_vars *vars)
+/*
+	@brief interprets num8 and num2 to extrude up or down
+*/
+static void	key_hook_ext(int kc, t_vars *vars)
 {
 	if (kc == 65431 || kc == 65433)
 	{
@@ -27,7 +30,10 @@ void	key_hook_ext(int kc, t_vars *vars)
 	}
 }
 
-void	key_hook_scale(int kc, t_vars *vars)
+/*
+	@brief interprets + and - to scale up or down
+*/
+static void	key_hook_scale(int kc, t_vars *vars)
 {
 	if (kc == 45 || kc == 61 || kc == 65451 || kc == 65453)
 	{
@@ -42,7 +48,11 @@ void	key_hook_scale(int kc, t_vars *vars)
 		key_hook_ext(kc, vars);
 }
 
-void	key_hook_tr(int kc, t_vars *vars)
+/*
+	@brief interprets arrow keys to update translation
+*/
+
+static void	key_hook_tr(int kc, t_vars *vars)
 {
 	if (kc >= 65361 && kc <= 65364)
 	{
@@ -61,7 +71,10 @@ void	key_hook_tr(int kc, t_vars *vars)
 		key_hook_scale(kc, vars);
 }
 
-int	key_hook_2(int keycode, t_vars *vars)
+/*
+	@brief interprets resetters (R, T , Y)
+*/
+static void	key_hook_2(int keycode, t_vars *vars)
 {
 	if (keycode == 114 || keycode == 116 || keycode == 121)
 	{
@@ -79,9 +92,13 @@ int	key_hook_2(int keycode, t_vars *vars)
 	}
 	else
 		key_hook_tr(keycode, vars);
-	return (0);
 }
 
+/*
+	@brief catches and interprets keypress.
+	@param keycode the ascii code of the pressed key.
+	@param vars pointer to the program data
+*/
 int	key_hook(int keycode, t_vars *vars)
 {
 	int		kc;
