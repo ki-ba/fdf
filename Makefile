@@ -66,5 +66,5 @@ $(LIBFT_DIR)libft.a:
 $(MATRIX_DIR)libmatrix.a:
 	$(MAKE) -C $(MATRIX_DIR) LIBFT_DIR="../libft"
 
-$(NAME): $(LIBFT_DIR)libft.a $(OBJ)
+$(NAME): $(LIBFT_DIR)libft.a $(MLX_DIR)libmlx.a $(OBJ)
 	$(CC) $(FLAGS) $(OBJ) $(LIBS) $(INCS) -o $(NAME)
